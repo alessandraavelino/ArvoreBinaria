@@ -1,3 +1,6 @@
+# Por uma questão de organização visual, ao escolher a opção [4], será exibido as informações de: Pos order, In Order
+# Pre order e em decrescente. Semelhante ao digitar a opção [5], onde será exibido o menor e o maior elemento da árvore.
+
 class Vertice:
      
     def __init__(self, key, payload):
@@ -17,20 +20,20 @@ class Tree:
         self.raiz = None
         self.count = 0
 
-#TREE INSERT
+# Insert !
     def treeInsert(self,z):
         y = None 
         x = self.raiz
 
-        while(x != None): #enquanto a raíz for diferente de none
-            y = x # none recebe a raíz
+        while(x != None): 
+            y = x 
             if(z.key < x.key): 
-                x = x.left # raíz recebe a esquerda
+                x = x.left 
             else:
-                x = x.right #raiz recebe a folha da direita
+                x = x.right 
 
         z.pai = y
-        if(y == None): #se o pai for none,a raíz recebe o 
+        if(y == None):  
             self.raiz = z
         elif(z.key < y.key):
             y.left = z
@@ -38,7 +41,7 @@ class Tree:
             y.right = z
         self.count += 1
 
-#TREE SEARCH
+# Search !
     def iterative_tree_search(self, key):
         if(self.raiz == None):
             return None
@@ -51,7 +54,7 @@ class Tree:
                 vertice = vertice.right
         return vertice
 
-#TREE IN ORDER
+# In Order !
     def inorder_tree_walk(self, vertice=None):
 
         if(self.raiz == None):
@@ -64,7 +67,7 @@ class Tree:
         if(vertice.right != None):
             self.inorder_tree_walk(vertice = vertice.right)
 
-#TREE PRINT DECRESCENTE
+# Decrescente !
     def tree_decrescente(self, vertice=None):
 
         if(self.raiz == None):
@@ -77,7 +80,7 @@ class Tree:
         if(vertice.left != None):
             self.tree_decrescente(vertice = vertice.left)
 
-#TREE PRÉ ORDER
+# Pré Order !
     def preOrder_Tree(self,vertice = None):
 
         if(self.raiz == None):
@@ -90,9 +93,7 @@ class Tree:
         if(vertice.right != None):
             self.preOrder_Tree(vertice = vertice.right)
                
-
-
-#TREE PÓS ORDER
+# Pós Order !
     def posOrder_Tree(self,vertice = None):
 
         if(self.raiz == None):
@@ -106,13 +107,8 @@ class Tree:
         print(vertice)
            
 
-#TREE PREDECESSOR
-    def tree_predecessor(self,vertice):
-        if(vertice.left != None):
-            return self.tree_maximum(vertice=vertice.left)
 
-#TREE MINIMUM RECURSIVO
-
+# Minimum [Modo Recursivo]
     def tree_minimum_recursivo(self, vertice = None):
         if(self.raiz == None):
             return None
@@ -121,7 +117,8 @@ class Tree:
         while(vertice.left != None):
             vertice = vertice.left
         return vertice
-#TREE MAXIMUM
+
+# Maximum [Maior Elemento]
     def tree_maximum(self, vertice = None):
         if(self.raiz == None): #arvore vazia
             return None
@@ -134,19 +131,29 @@ class Tree:
         return vertice
 
 
-#TREE SUCESSOR
+# Sucessor !
     def tree_sucessor(self,vertice):
         if(vertice.right != None):
             return self.tree_minimum_recursivo(vertice = vertice.right)
 
         y = vertice.pai
-        while(y != None and vertice == y.right):
+        while (y != None and vertice == y.right):
             vertice = y
             y = vertice.pai
-
             return y
 
-#TREE TRANSPLANT
+# Predecessor !
+    def tree_predecessor(self,vertice):
+        if(vertice.left != None):
+            return self.tree_maximum(vertice=vertice.right)
+
+        y = vertice.pai
+        while (y != None and vertice != y.right):
+            vertice = y
+            y = vertice.pai
+        return y
+
+# Transplant !
     def tree_transplant(self, u, v):
         if(u.pai == None):
             self.raiz = v
@@ -157,7 +164,7 @@ class Tree:
         if(v != None):
             v.pai = u.pai
 
-#TREE REMOVE
+# Remover !
     def tree_Remove(self,z):
         if(z.left == None):
             self.tree_transplant(z,z.right)
@@ -175,31 +182,28 @@ class Tree:
             y.left = z.left
             y.left.pai = y
 
-   
-     
-#### fim da classe ####
-
+# ------------------------------------------ #
 
 def menu():
-    print("---> Aluna: Alessandra Avelino - TSI (P2) <---")
-    print("---------> Árvore Binária de Busca <----------")
+    print("***************************************************")
+    print("*---> Aluna: Alessandra Avelino - TSI (P2) <------*")
+    print("*--------> Árvore Binária de Busca <--------------*")
+    print("***************************************************")
     print("Escolha a opção desejada:")
     print("0 - Sair do programa")
-    print("1 - Insert")
-    print("2 - Remove")
-    print("3 - Search")
-    print("4 - In Order")
-    print("5 - Pre Order")
-    print("6 - Pos Order")
-    print("7 - Tree Mínimo")
-    print("8 - Tree Máximo")
-    print("9 - Decrescente")
-
-    return int(input())
+    print("1 - Inserir")
+    print("2 - Remover")
+    print("3 - Buscar")
+    print("4 - Exibir ordens")
+    print("5 - Exibir menor e maior")
+    print("6 - Buscar sucessor")
+    print("7 - Buscar predecessor")
+    print("***************************************************")
+    return int(input("-> "))
 
 def adicionaVertice(arvore):
-    print('Informe o par "key payload"')
-    texto = input()
+    print('Informe o par "key payload:"')
+    texto = input("-> ")
     key, payload = texto.split()
     vertice = Vertice(key, payload)
     arvore.treeInsert(vertice)
@@ -209,46 +213,68 @@ def removeVertice(arvore):
     chave = int(input())
     vertice = arvore.iterative_tree_search(chave)
     if(vertice == None):
-        print("Vértice de chave ", chave, "não existe")
+        print("A Vértice de chave ", chave, "não existe!")
     else:
         arvore.tree_Remove(vertice)
-        print("Vértice removida")
+        print("Vértice removida com sucesso!")
         
 def buscaVertice(arvore):
     print("Qual chave você deseja localizar? ", end="")
-    chave = int(input())
+    chave = int(input("-> "))
     vertice = arvore.iterative_tree_search(chave)
     if(vertice == None):
         print("Chave não localizada!")
     else:
         arvore.iterative_tree_search(chave)
-        print("Chave", chave, "localizada!")
+        print("A chave", chave, " foi localizada!")
+
+def sucessorVertice(arvore):
+    print("Veríficar o sucessor de qual chave? ", end="")
+    chave = int(input("-> "))
+    vertice =  arvore.iterative_tree_search(chave)
+    if(vertice != None):
+        print("O sucessor da", chave, "é:", arvore.tree_sucessor(vertice))
+    else:
+        print("Chave não localizada")
+
+def predecessorVertice(arvore):
+    print("Veríficar o predecessor de qual chave? ", end="")
+    chave = int(input("-> "))
+    vertice =  arvore.iterative_tree_search(chave)
+    if(vertice != None):
+        print("O predecessor da chave", chave, "é:", arvore.tree_predecessor(vertice))       
+    else:
+        print("Chave não localizada")
 
 def main():
     arvore = Tree()
     opcao = menu()
     while(opcao != 0):
-        if  (opcao == 1):
+        if (opcao == 1):
             adicionaVertice(arvore)
         elif(opcao == 2):
             removeVertice(arvore)
         elif(opcao == 3):
             buscaVertice(arvore)
         elif(opcao == 4):
+            print("*** Imprimindo em Ordem: ***") 
             arvore.inorder_tree_walk()
-        elif(opcao == 5):
+            print("** Imprimindo em Pre Ordem: ***")
             arvore.preOrder_Tree()
-        elif(opcao == 6):
+            print("*** Imprimindo em Pós Ordem: ***")
             arvore.posOrder_Tree()
-        elif(opcao == 7):
-            print(arvore.tree_minimum_recursivo())
-        elif(opcao == 8):
-            print(arvore.tree_maximum())
-        elif(opcao == 9):
+            print("** Imprimindo em Ordem Decrescente: ***")
             arvore.tree_decrescente()
+        elif(opcao == 5):
+            print("MENOR vértice da árvore é: ", arvore.tree_minimum_recursivo())
+            print("MAIOR vértice da árvore é: ", arvore.tree_maximum())
+        elif(opcao == 6):
+            sucessorVertice(arvore)
+        elif(opcao == 7):
+            predecessorVertice(arvore)
         else:
             print("Opção inválida!")
         opcao = menu()
-
+        
 if(__name__== "__main__"):
     main()
