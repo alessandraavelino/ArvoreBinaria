@@ -140,7 +140,7 @@ class Tree:
         while (y != None and vertice == y.right):
             vertice = y
             y = vertice.pai
-            return y
+        return y
 
 # Predecessor !
     def tree_predecessor(self,vertice):
