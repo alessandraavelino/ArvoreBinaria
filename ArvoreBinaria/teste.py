@@ -1,3 +1,4 @@
+#funcionou?
 class Vertice:
      
     def __init__(self, key, payload):
@@ -99,21 +100,23 @@ class Tree:
             return
         if(vertice == None):
             vertice = self.raiz
-             
-        if(vertice.left != None):       
+        if(vertice.left != None):
             self.posOrder_Tree(vertice = vertice.left)
-            print(vertice)
-                       
-        if(vertice.right != None):    
+        if(vertice.right != None):
             self.posOrder_Tree(vertice = vertice.right)
-            
-        
+        print(vertice)
            
 
 #TREE PREDECESSOR
     def tree_predecessor(self,vertice):
-        if(vertice.left != None):
+        if(vertice.left == None):
             return self.tree_maximum(vertice=vertice.left)
+
+        y = vertice.pai
+        while (y != None and vertice == y.right):
+            vertice = y
+            y = vertice.pai
+            return y
 
 #TREE MINIMUM RECURSIVO
 
@@ -144,12 +147,22 @@ class Tree:
             return self.tree_minimum_recursivo(vertice = vertice.right)
 
         y = vertice.pai
-        while(y != None and vertice == y.right):
+        while (y != None and vertice == y.right):
             vertice = y
             y = vertice.pai
+        return y
 
-            return y
+#tree antecessor
+    def tree_antecessor(self,vertice):
+        if(vertice.left != None):
+            return self.tree_maximum(vertice=vertice.right)
 
+        y = vertice.pai
+        while (y != None and vertice != y.right):
+            vertice = y
+            y = vertice.pai
+        return y
+              
 #TREE TRANSPLANT
     def tree_transplant(self, u, v):
         if(u.pai == None):
@@ -179,7 +192,7 @@ class Tree:
             y.left = z.left
             y.left.pai = y
 
-   
+
      
 #### fim da classe ####
 
@@ -189,15 +202,18 @@ def menu():
     print("---------> Árvore Binária de Busca <----------")
     print("Escolha a opção desejada:")
     print("0 - Sair do programa")
-    print("1 - Insert")
-    print("2 - Remove")
-    print("3 - Search")
+    print("1 - Inserir")
+    print("2 - Remover")
+    print("3 - Buscar")
     print("4 - In Order")
     print("5 - Pre Order")
     print("6 - Pos Order")
     print("7 - Tree Mínimo")
     print("8 - Tree Máximo")
     print("9 - Decrescente")
+    print("10 - sucessor.")
+    print("11 - antecessor")
+    print("12 - Transplantar")
 
     return int(input())
 
@@ -228,6 +244,50 @@ def buscaVertice(arvore):
         arvore.iterative_tree_search(chave)
         print("Chave", chave, "localizada!")
 
+def sucessorVertice(arvore):
+    print("Veríficar o sucessor de qual chave? ", end="")
+    chave = int(input())
+    vertice =  arvore.iterative_tree_search(chave)
+    if(vertice != None):
+        print("O sucessor de", chave, "é:", arvore.tree_sucessor(vertice))
+    else:
+        print("Chave não localizada")
+
+def antecessorVertice(arvore):
+    print("Veríficar o antceessor de qual chave? ", end="")
+    chave = int(input())
+    vertice =  arvore.iterative_tree_search(chave)
+    if(vertice != None):
+        print("O antecessor de", chave, "é:", arvore.tree_antecessor(vertice))       
+    else:
+        print("Chave não localizada")
+
+def transplantVertice(arvore):
+    print("Informe a chave de busca ", end="")
+    chave = int(input())
+    vertice = arvore.iterative_tree_search(chave)
+
+    if(vertice == None):
+        print("Chave não localizada!")
+    else:
+       print("Insira nova chave de busca: ", end="")
+       texto = input()
+       key, payload = texto.split()
+       nova_vertice = Vertice(key, payload)
+       arvore.tree_transplant(nova_vertice, vertice)
+       print("vertice atualizada de ", chave, "para", nova_vertice)
+       
+    
+
+    
+
+
+
+        
+        
+        
+        
+
 def main():
     arvore = Tree()
     opcao = menu()
@@ -250,6 +310,12 @@ def main():
             print(arvore.tree_maximum())
         elif(opcao == 9):
             arvore.tree_decrescente()
+        elif(opcao == 10):
+            sucessorVertice(arvore)
+        elif(opcao == 11):
+            antecessorVertice(arvore)
+        elif(opcao == 12):
+            transplantVertice(arvore)
         else:
             print("Opção inválida!")
         opcao = menu()
