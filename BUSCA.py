@@ -15,7 +15,6 @@ def buscaBinaria(vetor, key, i = 0, F = None):
         i = meio +1
     return buscaBinaria(vetor, key, i, F)
 
-# Test array
 
 vetor = [ 2, 3, 4, 10, 40 ]
 print('Digite a chave de busca: ')
